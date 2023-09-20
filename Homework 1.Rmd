@@ -1,0 +1,193 @@
+---
+title: "Homework 1"
+author: "Donovan Kott"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+Import and View Data set
+```{r data import}
+library(readxl)
+Data1<- read_excel("C:/Users/dmkot/OneDrive/Documents/Grad/Fall 2023/Business Forecasting/Typical_Employee_Survey_Data.xlsx", col_names = FALSE)
+View(Data1)
+```
+
+Give each column a name to provide context
+```{r column headers}
+names(Data1)[1] <- "Age"
+names(Data1)[2] <- "Gender"
+names(Data1)[3] <- "Job Satisfaction"
+names(Data1)[4] <- "Job Characteristics"
+names(Data1)[5] <- "Service Time"
+names(Data1)[6] <- "Promotion Likeliness"
+names(Data1)[7] <- "Decision Ability"
+names(Data1)[8] <- "Budget Responsibility"
+names(Data1)[9] <- "Proudness"
+names(Data1)[10] <- "Stay if Less Money?"
+names(Data1)[11] <- "Coworker Relationships"
+View(Data1)
+```
+
+See Column names
+```{r}
+head(Data1)
+```
+
+See what kind of data type each column is. Currently they are all numerical but that is not the case. We need to convert the survey type ones into factors
+```{r See Data types}
+str(Data1)
+```
+
+Converting to Factors and renaming levels to give better context.
+Gender: The graphs shows more males than females
+```{r Levels Gender}
+Data1$Gender <- as.factor(Data1$Gender)
+levels(Data1$Gender) = c("M", "F")
+levels(Data1$Gender)
+table(Data1$Gender)
+plot(Data1$Gender)
+```
+
+Job Satisfaction: The graph shows majority are Very or Moderately Satisfied
+```{r Levels Job Satisfaction}
+Data1$`Job Satisfaction` <- as.factor(Data1$`Job Satisfaction`)
+levels(Data1$`Job Satisfaction`) = c("Very Satisfied", "Moderately Satisfied" , "A Little Dissatisfied", "Very Dissatisfied")
+levels(Data1$`Job Satisfaction`)
+table(Data1$`Job Satisfaction`)
+plot(Data1$`Job Satisfaction`)
+```
+
+Job Characteristics: A large portion are Enjoying the work
+```{r Levels Job Characteristics}
+Data1$`Job Characteristics` <- as.factor(Data1$`Job Characteristics`)
+levels(Data1$`Job Characteristics`) = c("High Income", "No Danger of Being Fired" , "Flexible Hours", "Opportunities for Advancement", "Enjoying the Work")
+levels(Data1$`Job Characteristics`)
+table(Data1$`Job Characteristics`)
+plot(Data1$`Job Characteristics`)
+```
+
+Promotion Likeliness: A majority is Unlikely or Very Unlikely
+```{r Levels Promotion Likeliness}
+Data1$`Promotion Likeliness` <- as.factor(Data1$`Promotion Likeliness`)
+levels(Data1$`Promotion Likeliness`) = c("Very Likely", "Likely" , "Not Sure", "Unlikely", "Very Unlikely")
+levels(Data1$`Promotion Likeliness`)
+table(Data1$`Promotion Likeliness`)
+plot(Data1$`Promotion Likeliness`)
+```
+
+Decision Ability: There seems to be a pretty even split between making decisions and not
+```{r Levels Decision Ability}
+Data1$`Decision Ability` <- as.factor(Data1$`Decision Ability`)
+levels(Data1$`Decision Ability`) = c("Always", "Much of the Time" , "Sometimes", "Never")
+levels(Data1$`Decision Ability`)
+table(Data1$`Decision Ability`)
+plot(Data1$`Decision Ability`)
+```
+
+Budget Responsibility: A majority have budget responsibility
+```{r Levels Budget Responsibility}
+Data1$`Budget Responsibility` <- as.factor(Data1$`Budget Responsibility`)
+levels(Data1$`Budget Responsibility`) = c("Yes", "No")
+levels(Data1$`Budget Responsibility`)
+table(Data1$`Budget Responsibility`)
+plot(Data1$`Budget Responsibility`)
+```
+
+Proudness: A large portion is very proud or somewhat proud
+```{r Levels Proudness}
+Data1$Proudness <- as.factor(Data1$Proudness)
+levels(Data1$Proudness) = c("Very Proud", "Somewhat Proud", "Indifferent" , "Not at All Proud")
+levels(Data1$Proudness)
+table(Data1$Proudness)
+plot(Data1$Proudness)
+```
+
+Stay if Less Money?: A majority is unlikely or very unlikely to stay if offered more money somewhere else
+```{r Levels Stay if Less Money}
+Data1$`Stay if Less Money?` <- as.factor(Data1$`Stay if Less Money?`)
+levels(Data1$`Stay if Less Money?`) = c("Very Likely", "Likely" , "Not Sure", "Unlikely", "Very Unlikely")
+levels(Data1$`Stay if Less Money?`)
+table(Data1$`Stay if Less Money?`)
+plot(Data1$`Stay if Less Money?`)
+```
+
+Coworker Relationships: A large portion have very good or good relationships with coworkers
+```{r Levels Coworker Relationships}
+Data1$`Coworker Relationships` <- as.factor(Data1$`Coworker Relationships`)
+levels(Data1$`Coworker Relationships`) = c("Very Good", "Good" , "So So", "Bad", "Very Bad")
+levels(Data1$`Coworker Relationships`)
+table(Data1$`Coworker Relationships`)
+plot(Data1$`Coworker Relationships`)
+```
+
+Check data types again to see if the factors were set right
+```{r Levels check str}
+str(Data1)
+```
+
+Boxplot for Age. Median is 38 and Mean is 39.1.Mean is higher do to a few high age outliers. The standard deviation is 10.4
+```{r Summary Stats Age}
+sd(Data1$Age)
+summary(Data1$Age)
+boxplot(Data1$Age)
+```
+
+Boxplot for Service Time. Median is 5 with a mean of 8.224. The mean is higher because there are a few higher service time outliers. Standard deviation of 8.98. 
+```{r Summary Stats Service Time}
+sd(Data1$`Service Time`)
+summary(Data1$`Service Time`)
+boxplot(Data1$`Service Time`)
+```
+
+The graph between Age vs Service time grouped by gender shows females have some of the longest service times and highest ages.
+```{r Relationship Plot1}
+plot(Data1$Age,Data1$`Service Time`)
+plot(Data1$Age,Data1$`Service Time`, pch = 19, col = factor(Data1$Gender))
+legend("topleft", legend = levels(factor(Data1$Gender)), pch = 19, col = factor(levels(factor(Data1$Gender))))
+
+```
+
+The graph between Age vs Service time grouped by Coworker Relationships doesnt show a pattern or trend and is more randomly spread
+```{r Relationship plot2}
+plot(Data1$Age,Data1$`Service Time`, pch = 19, col = factor(Data1$`Coworker Relationships`))
+legend("topleft", legend = levels(factor(Data1$`Coworker Relationships`)), pch = 19, col = factor(levels(factor(Data1$`Coworker Relationships`))))
+```
+
+The graph between Age vs Service time grouped by Promotion Likeliness shows younger and less service time are more likely to think they can be promoted while higher age and service time employees think they are very unlikely or likely
+```{r Relationship plot3}
+plot(Data1$Age,Data1$`Service Time`, pch = 19, col = factor(Data1$`Promotion Likeliness`))
+legend("topleft", legend = levels(factor(Data1$`Promotion Likeliness`)), pch = 19, col = factor(levels(factor(Data1$`Promotion Likeliness`))))
+```
+
+
+The graph between Age vs Service time grouped by Stay if less money doesn't show an apparent pattern or trend
+```{r Relationship plot4}
+plot(Data1$Age,Data1$`Service Time`, pch = 19, col = factor(Data1$`Stay if Less Money?`))
+legend("topleft", legend = levels(factor(Data1$`Stay if Less Money?`)), pch = 19, col = factor(levels(factor(Data1$`Stay if Less Money?`))))
+```
+
+The graph between Age vs Service time grouped by Job Satisfaction shows an interesting pattern that only employees under the age of 45 ever say they are very satisfied where as only employees over the age of 40 ever say they a very dissatisfied 
+```{r Relationship plot5}
+plot(Data1$Age,Data1$`Service Time`, pch = 19, col = factor(Data1$`Job Satisfaction`))
+legend("topleft", legend = levels(factor(Data1$`Job Satisfaction`)), pch = 19, col = factor(levels(factor(Data1$`Job Satisfaction`))))
+```
+
+Summary stats grouped by gender. Shows females are slightly older
+```{r more summary stats}
+by(Data1$Age,Data1$Gender,summary)
+by(Data1$`Service Time`,Data1$Age, summary)
+
+
+```
+
+
